@@ -3,7 +3,8 @@ class SessionsController < ApplicationController
   end
 
   def create
-        email = params[:session][:email].downcase
+    email = params[:session][:email].downcase #フォームデータのemailを小文字化して取り出してる
+                                                #paramsにデータが保存されている
     password = params[:session][:password]
     if login(email, password)
       flash[:success] = 'ログインに成功しました。'
@@ -19,6 +20,8 @@ class SessionsController < ApplicationController
     flash[:success] = 'ログアウトしました。'
     redirect_to root_url
   end
+  
+  
   private
 
   def login(email, password)

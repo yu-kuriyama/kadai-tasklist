@@ -1,8 +1,13 @@
 class TasksController < ApplicationController
-    before_action :require_user_logged_in, only: [:index, :show, :create, :new]
+    before_action :require_user_logged_in
+    before_action :correct_user, only: [:destroy]
     
     def index
-        @tasks = Task.all.page(params[:page])
+        if logged_in?
+      @task = current_user.tasks.build  # form_with 用
+      @tasks = current_user.tasks.order(id: :desc).page(params[:page])
+    end
+        #@tasks = Task.all.page(params[:page])
     end
     
     def show
@@ -20,7 +25,7 @@ class TasksController < ApplicationController
             flash[:success] = 'Task が正常に登録されました'
             redirect_to @task
         else
-           @task = current_user.tasks.order(id: :desc).page(params[:page])
+           
             flash.now[:danger] = 'Task が登録されませんでした'
             render :new
         end    
